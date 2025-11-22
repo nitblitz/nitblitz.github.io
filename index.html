@@ -1,21 +1,118 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>My Cool Website</title>
-  <style>
-    body {
-      background-image: url('https://nitblitz.github.io/images/background.png');
-      background-repeat: repeat;
-      background-size: auto;
-      background-position: top left;
-    }
-  </style>
-</head>
-<body>
-  <div align="right">
-    <img src="images/icon.png">
+  <head>
+    <title>Nitin's Website</title>
+    <style>
+       #calculator {
+        border: 2px solid burlywood; /* light brown */
+        padding: 10px;
+        display: inline-block;
+      }
+        #calculator input,
+        #calculator select,
+        #calculator label,
+        #calculator button {
+          vertical-align: middle;
+          margin: 5px;
+        }
+
+      /* Input boxes: 2-digit width but allow any number */
+      #calculator input[type="number"] {
+        width: 2em; /* visually 2 digits wide */
+        
+        /* Remove arrows/spinners */
+        -moz-appearance: textfield; /* Firefox */
+      }
+      #calculator input[type="number"]::-webkit-inner-spin-button,
+      #calculator input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none; /* Chrome, Safari, Edge */
+        margin: 0;
+      }
+
+      /* Dropdown styling */
+      #operator {
+        font-weight: bold;
+      }
+
+      /* Operator colors */
+      #operator option[value="+"] { color: green; }
+      #operator option[value="-"] { color: red; }
+      #operator option[value="*"] { color: blue; }
+      #operator option[value="/"] { color: purple; }
+
+      body {
+        background-image: url('https://nitblitz.github.io/images/background.png');
+        background-repeat: repeat;
+        background-size: auto;
+        background-position: top left;
+      }
+      p {
+        color: #c6f320;
+      }
+      img {
+        border-width: 8px;
+        border-style: solid;
+        border-color: #0d0;
+      }
+      .example {
+        text-shadow: 2px 1px 5px yellow;
+      }
+      .new_class {
+        text-shadow: 2px 5px 5px white;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div align="right">
+      <img src="images/icon.png">
+    </div>
+    <h1><font color="#FFF">Hello!</font></h1>
+    <p class="example">Thanks for coming to my website.</p>
+    <p class="new_class">Would you like to see my github page? <a class="new_class" target="_blank" href="https://github.com/nitblitz">click here</a>.</p>
+   <div id="calculator">
+    <input type="number" id="first_input" title="Enter first number">
+    
+    <select id="operator">
+      <option value="+">+</option>
+      <option value="-">-</option>
+      <option value="*">×</option>
+      <option value="/">÷</option>
+    </select>
+    
+    <input type="number" id="second_input" title="Enter second number"">
+    
+    <button onclick="calculate()">=</button>
+    
+    <label id="result"></label>
   </div>
-  <h1><font color="#FFF">Hello!</font></h1>
-  <p style="color: #FF99FF">Thanks for coming to my website.</p>
-</body>
+
+    <script>
+    function calculate() {
+      const num1 = parseFloat(document.getElementById('first_input').value);
+      const num2 = parseFloat(document.getElementById('second_input').value);
+      const operator = document.getElementById('operator').value;
+      let result;
+
+      switch (operator) {
+        case '+':
+          result = num1 + num2;
+          break;
+        case '-':
+          result = num1 - num2;
+          break;
+        case '*':
+          result = num1 * num2;
+          break;
+        case '/':
+          result = num2 !== 0 ? num1 / num2 : 'Error (÷0)';
+          break;
+        default:
+          result = 'Invalid';
+      }
+
+      document.getElementById('result').textContent = result;
+    }
+  </script>
+  </body>
 </html>

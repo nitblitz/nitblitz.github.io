@@ -3,49 +3,88 @@
   <head>
     <title>Nitin's Website</title>
     <style>
-       #calculator {
-        border: 2px solid burlywood; /* light brown */
-        padding: 10px;
-        display: inline-block;
+        #calculator {
+          background: rgba(128, 128, 128, 0.5);
+          padding: 30px;
+          border-radius: 15px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+          width: 350px;
       }
-        #calculator input,
-        #calculator select,
-        #calculator label,
-        #calculator button {
-          vertical-align: middle;
-          margin: 5px;
+        input[type="number"], select, button {
+            padding: 12px;
+            font-size: 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            display: block;
         }
 
-      /* Input boxes: 2-digit width but allow any number */
-      #calculator input[type="number"] {
-        width: 2em; /* visually 2 digits wide */
-        
-        /* Remove arrows/spinners */
-        -moz-appearance: textfield; /* Firefox */
-      }
-      #calculator input[type="number"]::-webkit-inner-spin-button,
-      #calculator input[type="number"]::-webkit-outer-spin-button {
-        -webkit-appearance: none; /* Chrome, Safari, Edge */
-        margin: 0;
-      }
+        input[type="number"]:focus, select:focus {
+            border-color: #667eea;
+        }
 
-      /* Dropdown styling */
-      #operator {
-        font-weight: bold;
-      }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
 
-      /* Operator colors */
-      #operator option[value="+"] { color: green; }
-      #operator option[value="-"] { color: red; }
-      #operator option[value="*"] { color: blue; }
-      #operator option[value="/"] { color: purple; }
+        button:hover {
+            background: #5568d3;
+        }
+
+        #result {
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            min-height: 24px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            word-break: break-all;
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .checkbox-container {
+            display: block;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #333;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
 
       body {
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+        margin: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         background-image: url('https://nitblitz.github.io/images/background.png');
         background-repeat: repeat;
         background-size: auto;
         background-position: top left;
       }
+      h2 {
+            margin: 0 0 10px 0;
+            text-align: center;
+            color: #333;
+            font-size: 16px;
+        }
       p {
         color: #c6f320;
       }
@@ -70,49 +109,105 @@
     <h1><font color="#FFF">Hello!</font></h1>
     <p class="example">Thanks for coming to my website.</p>
     <p class="new_class">Would you like to see my github page? <a class="new_class" target="_blank" href="https://github.com/nitblitz">click here</a>.</p>
-   <div id="calculator">
-    <input type="number" id="first_input" title="Enter first number">
-    
-    <select id="operator">
-      <option value="+">+</option>
-      <option value="-">-</option>
-      <option value="*">×</option>
-      <option value="/">÷</option>
-    </select>
-    
-    <input type="number" id="second_input" title="Enter second number"">
-    
-    <button onclick="calculate()">=</button>
-    
-    <label id="result"></label>
-  </div>
+    <div id="calculator">
+        <h2>Simple Calculator</h2>
+        
+        <input type="number" id="first_input" placeholder="Enter first number" title="Enter first number">
+        <br>
+        <select id="operator">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">×</option>
+            <option value="/">÷</option>
+        </select>
+        <br>
+        <input type="number" id="second_input" placeholder="Enter second number" title="Enter second number">
+        
+        <div class="checkbox-container">
+            <input type="checkbox" id="scientific_notation" onchange="updateResultFormat()">
+            <label for="scientific_notation">Use scientific notation</label>
+        </div>
+        
+        <button onclick="calculate()">Check Result</button>
+        <br>
+        <label id="result"></label>
+    </div>
 
-    <script>
-    function calculate() {
-      const num1 = parseFloat(document.getElementById('first_input').value);
-      const num2 = parseFloat(document.getElementById('second_input').value);
-      const operator = document.getElementById('operator').value;
-      let result;
+<script>
+        let lastResult = null;
 
-      switch (operator) {
-        case '+':
-          result = num1 + num2;
-          break;
-        case '-':
-          result = num1 - num2;
-          break;
-        case '*':
-          result = num1 * num2;
-          break;
-        case '/':
-          result = num2 !== 0 ? num1 / num2 : 'Error (÷0)';
-          break;
-        default:
-          result = 'Invalid';
-      }
+        function calculate() {
+            const input1 = document.getElementById('first_input').value;
+            const input2 = document.getElementById('second_input').value;
+            
+            // Check if inputs are empty or not valid numbers
+            if (input1 === '' || input2 === '') {
+                alert('Not a valid number');
+                return;
+            }
+            
+            const num1 = parseFloat(input1);
+            const num2 = parseFloat(input2);
+            const operator = document.getElementById('operator').value;
+            
+            // Check if parsed values are valid numbers
+            if (isNaN(num1) || isNaN(num2)) {
+                alert('Not a valid number');
+                return;
+            }
+            
+            let result;
+            
+            switch (operator) {
+                case '+':
+                    result = num1 + num2;
+                    break;
+                case '-':
+                    result = num1 - num2;
+                    break;
+                case '*':
+                    result = num1 * num2;
+                    break;
+                case '/':
+                    result = num2 !== 0 ? num1 / num2 : 'Error (÷0)';
+                    break;
+                default:
+                    result = 'Invalid';
+            }
+            
+            lastResult = result;
+            displayResult(result);
+        }
 
-      document.getElementById('result').textContent = result;
-    }
-  </script>
+        function updateResultFormat() {
+            if (lastResult !== null) {
+                displayResult(lastResult);
+            }
+        }
+
+        function displayResult(result) {
+            const useScientific = document.getElementById('scientific_notation').checked;
+            
+            // Format the result based on checkbox
+            if (typeof result === 'number') {
+                if (useScientific) {
+                    // Use scientific notation
+                    result = result.toExponential(10);
+                } else {
+                    // Display as regular number (limit to prevent scientific notation)
+                    // Clamp extremely large/small numbers to prevent auto scientific notation
+                    if (Math.abs(result) >= 1e15) {
+                        result = 'Number too large';
+                    } else if (Math.abs(result) < 1e-6 && result !== 0) {
+                        result = 'Number too small';
+                    } else {
+                        result = result.toLocaleString('en-US', { maximumFractionDigits: 10 });
+                    }
+                }
+            }
+            
+            document.getElementById('result').textContent = result;
+        }
+    </script>
   </body>
 </html>
